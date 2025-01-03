@@ -29,7 +29,7 @@ University
 
 ## 🔥 Updates
 
-`[2024-12-27]`: Decoupled Open-Set Object Detector (DOSOD) with ultra real-time speed and superior accuracy is released.
+`[2024-12-27]`: Decoupled Open-Set Object Detector (DOSOD) with ultra real-time speed and superior accuracy is released. **We sincerely welcome all kinds of contributions, such as porting DOSOD to more edge-side platforms, and also welcome all kinds of opinions.**
 
 ## 1. Introduction
 
@@ -185,7 +185,7 @@ python deploy/onnx_demo.py path_to_rep_onnx_file path_to_test_image path_to_text
 To make the model available for RDK X5, we need to use another config file in Step 3: <br>
 `path_to_rep_config_file` should be files with suffix *_d-robotics.py*, for exmaple `configs/dosod/rep_dosod_mlp3x_s_d-robotics.py`
 For more details, you can refer to [code file](yolo_world/models/dense_heads/dosod_head.py).
-> To run onnx model on RDK X5, you can refer to the [website](https://developer.d-robotics.cc/rdkx5) for more help.
+> To run model on RDK X5, you can refer to the [Instructions_EN](https://horizonrobotics.feishu.cn/docx/MZgtdSDzNoHyOjxFSQbcRoVDnEj?from=from_copylink) or [Instructions_CN](https://horizonrobotics.feishu.cn/docx/G5z3dOzWKozBtCxBZK9ceWEknTh?from=from_copylink) for more help.
 
 ## Acknowledgement
 
