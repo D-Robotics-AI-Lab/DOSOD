@@ -14,10 +14,13 @@ if __name__ == "__main__":
                         default='data/texts/coco_class_texts.json',
                         help='Path to text file''')
     parser.add_argument('--out-dir', type=str, help='The dir to save text embeddings npy')
+    parser.add_argument('--device',
+                        default='cuda:0',
+                        help='Device used for run')
 
     args = parser.parse_args()
 
-    device = 'cuda:0'
+    device = args.device
 
     with open(args.text) as f:
         data = json.load(f)
