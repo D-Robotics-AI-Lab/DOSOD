@@ -24,7 +24,7 @@ model = dict(
     data_preprocessor=dict(type='YOLOWDetDataPreprocessor'),
     backbone_text=dict(
         type='HuggingCLIPLanguageBackbone',
-        model_name='/horizon-bucket/d-robotics-bucket/yonghao01.he/pretrain_models/clip-vit-base-patch32',  # the path to clip model, replace it with your own
+        model_name='/root/DOSOD/clip-vit-base-patch32',  # the path to clip model, replace it with your own
         frozen_modules=['all']
     ),
     bbox_head=dict(type='DOSODYOLOv8Head',

@@ -127,3 +127,5 @@ venus_run.sh
 
 /local_test
 /dosod_models
+data/coco/annotations
+data/coco/val2017
