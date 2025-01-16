@@ -185,7 +185,20 @@ python deploy/onnx_demo.py path_to_rep_onnx_file path_to_test_image path_to_text
 To make the model available for RDK X5, we need to use another config file in Step 3: <br>
 `path_to_rep_config_file` should be files with suffix *_d-robotics.py*, for exmaple `configs/dosod/rep_dosod_mlp3x_s_d-robotics.py`
 For more details, you can refer to [code file](yolo_world/models/dense_heads/dosod_head.py).
-> To run model on RDK X5, you can refer to the [Instructions_EN](https://horizonrobotics.feishu.cn/docx/MZgtdSDzNoHyOjxFSQbcRoVDnEj?from=from_copylink) or [Instructions_CN](https://horizonrobotics.feishu.cn/docx/G5z3dOzWKozBtCxBZK9ceWEknTh?from=from_copylink) for more help.
+
+> To run the model on RDK X5, you can use the pre-prepared model with 80 COCO categories and the corresponding vocabulary JSON file. Follow the [Usage instructions](https://developer.d-robotics.cc/rdk_doc/Robot_development/boxs/function/hobot_dosod) to run it on the RDK X5.
+
+|              model              | Vocabulary json file | RDK X5 INT16 Model | RDK X5 INT8 Modlel |
+|:-------------------------------:|:--------------:|:---------------:|:---------------:|
+|    DOSOD-S<br/>(INT16/INT8)     | [offline_vocabulary.json](http://archive.d-robotics.cc/models/DOSOD/offline_vocabulary.json)  |  [dosod_mlp3x_s_rep-int16.bin](http://archive.d-robotics.cc/models/DOSOD/x5/dosod_mlp3x_s_rep-int16.bin)  |  [dosod_mlp3x_s_rep-int8.bin](http://archive.d-robotics.cc/models/DOSOD/x5/dosod_mlp3x_s_rep-int8.bin)  |
+|    DOSOD-M<br/>(INT16/INT8)     |  [offline_vocabulary.json](http://archive.d-robotics.cc/models/DOSOD/offline_vocabulary.json)  |   [dosod_mlp3x_m_rep-int16.bin](http://archive.d-robotics.cc/models/DOSOD/x5/dosod_mlp3x_m_rep-int16.bin)  |  [dosod_mlp3x_m_rep-int8.bin](http://archive.d-robotics.cc/models/DOSOD/x5/dosod_mlp3x_m_rep-int8.bin)  |
+|    DOSOD-L<br/>(INT16/INT8)     |  [offline_vocabulary.json](http://archive.d-robotics.cc/models/DOSOD/offline_vocabulary.json)  |  [dosod_mlp3x_l_rep-int16.bin](http://archive.d-robotics.cc/models/DOSOD/x5/dosod_mlp3x_l_rep-int16.bin)  |  [dosod_mlp3x_l_rep-int8.bin](http://archive.d-robotics.cc/models/DOSOD/x5/dosod_mlp3x_l_rep-int8.bin)  |
+
+<div align="center">
+<img width=2560px src="./assets/render_dosod.jpeg">
+</div>
+
+> Furthermore, if you wish to use the model with custom categories, you can refer to the [Instructions_EN](https://horizonrobotics.feishu.cn/docx/MZgtdSDzNoHyOjxFSQbcRoVDnEj?from=from_copylink) or [Instructions_CN](https://horizonrobotics.feishu.cn/docx/G5z3dOzWKozBtCxBZK9ceWEknTh?from=from_copylink) for more help.
 
 ## Acknowledgement
 
