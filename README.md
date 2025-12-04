@@ -245,7 +245,7 @@ python3 deploy/export_onnx.py \
 
 > `path_to_test_image` is the test image you need, for example `./demo/sample_images/bus.jpg`
 
-> `path_to_texts_json_file` is the test imag, for example `./demo/sample_images/bus.jpg`
+> `path_to_texts_json_file` is the vocabulary file you used, for example `./data/texts/offline_vocabulary.json`
 
 ```shell
 export PYTHONPATH=/root/DOSOD/
