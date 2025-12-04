@@ -153,33 +153,109 @@ Some extra things need attention are as follows:
 
 
 ## 4. Reparameterization and Inference
-### 4.1 On NVIDIA RTX 4090
-* Step 1: generate texts embeddings
+
+Reparameterize and infer model as the example with 80 categories COCO.
+
+### 4.1 On X86 PC (CPU or NVIDIA RTX 4090)
+
+* Step 0: (Optional) environment setup. If you already use `Part 3` setup the environment, skip this setup.
+
+```shell
+# download docker image and load
+wget https://huggingface.co/datasets/D-Robotics/DOSOD_docker_images/resolve/main/dosod_cpu_v1.tar
+
+docker load < dosod_cpu_v1.tar
 ```
-python tools/generate_text_prompts_dosod.py path_to_config_file path_to_model_file --text path_to_texts_json_file --out-dir dir_to_save_embedding_npy_file
+
+```shell
+# start docker container
+docker run -itd \
+    --name dosod \
+    --shm-size 128G \
+    --privileged=true \
+    -w /root \
+    d_robotics/dosod_cpu:v1
+
+# go inside docker container
+docker exec -it dosod bash
 ```
+
+* Step 1: generate category file for reparameterization.
+
+```shell
+python3 tools/generate_vocabulary_json.py --text "person","bicycle","car","motorcycle","airplane","bus","train","truck","boat","traffic light","fire hydrant","stop sign","parking meter","bench","bird","cat","dog","horse","sheep","cow","elephant","bear","zebra","giraffe","backpack","umbrella","handbag","tie","suitcase","frisbee","skis","snowboard","sports ball","kite","baseball bat","baseball glove","skateboard","surfboard","tennis racket","bottle","wine glass","cup","fork","knife","spoon","bowl","banana","apple","sandwich","orange","broccoli","carrot","hot dog","pizza","donut","cake","chair","couch","potted plant","bed","dining table","toilet","tv","laptop","mouse","remote","keyboard","cell phone","microwave","oven","toaster","sink","refrigerator","book","clock","vase","scissors","teddy bear","hair drier","toothbrush" --output data/texts/offline_vocabulary.json
+```
+
+By the way, you can refer other basic category files under the foloder [./data/texts](./data/texts)
+
+* Step 2: generate texts embeddings
+
+> python3 tools/generate_text_prompts_dosod.py path_to_config_file path_to_model_file --text path_to_texts_json_file --out-dir dir_to_save_embedding_npy_file
+
 > `path_to_config_file` is the config for training <br>
 > `path_to_model_file` the pth model file corresponding to `path_to_config_file` <br>
-> `path_to_texts_json_file` contains the vocabulary, for example `data/texts/coco_class_texts.json`
+> `path_to_texts_json_file` contains the vocabulary, the example files are under folder `data/texts`
 
-* Step 2: reparameterize model weights
+```shell
+export PYTHONPATH=/root/DOSOD/
+python3 tools/generate_text_prompts_dosod.py  \
+      configs/dosod/dosod_mlp3x_l_100e_1x8gpus_obj365v1_goldg_train_lvis_minival.py \
+      DOSOD/dosod_mlp3x_l.pth  \
+      --text data/texts/offline_vocabulary.json  \
+      --device cpu \
+      --out-dir ./work_dir
 ```
-python tools/reparameterize_dosod.py --model path_to_model_file --out-dir dir_to_save_rep_model_file --text-embed path_to_embedding_npy_file
-```
-> `path_to_embedding_npy_file` is the output from step 1
 
-* Step 3: export onnx using rep-style config
-```
-python deploy/export_onnx.py path_to_rep_config_file path_to_rep_model_file --without-nms --work-dir dir_to_save_rep_onnx_file
-```
-> `path_to_rep_config_file` is the modified config for rep, for example `configs/dosod/rep_dosod_mlp3x_s_100e_1x8gpus_obj365v1_goldg_train_lvis_minival.py`
-> `path_to_rep_model_file` is the output from step 2
+* Step 3: reparameterize model weights
+> python3 tools/reparameterize_dosod.py --model path_to_model_file --out-dir dir_to_save_rep_model_file --text-embed path_to_embedding_npy_file
 
-* Step 4: run onnx demo
+> `path_to_embedding_npy_file` is the output from step 1, for example `./work_dir/offline_vocabulary_dosod_mlp3x_l.npy`
+
+```shell
+export PYTHONPATH=/root/DOSOD/
+python3 tools/reparameterize_dosod.py \
+      --model DOSOD/dosod_mlp3x_l.pth \
+      --out-dir ./work_dir \
+      --text-embed ./work_dir/offline_vocabulary_dosod_mlp3x_l.npy
 ```
-python deploy/onnx_demo.py path_to_rep_onnx_file path_to_test_image path_to_texts_json_file --output-dir dir_to_save_result_image --onnx-nms
+
+* Step 4: export onnx using rep-style config
+
+> python3 deploy/export_onnx.py path_to_rep_config_file path_to_rep_model_file --without-nms --work-dir dir_to_save_rep_onnx_file
+
+> `path_to_rep_config_file` is the modified config for rep, for example `configs/dosod/rep_dosod_mlp3x_s_100e_1x8gpus_obj365v1_goldg_train_lvis_minival.py`. You need to set the key parameter **`num_training_classes`** to the count of categories for example 80.
+
+> `path_to_rep_model_file` is the output from step 2, for example `./work_dir/dosod_mlp3x_l_rep.pth`
+
+```shell
+export PYTHONPATH=/root/DOSOD/
+python3 deploy/export_onnx.py \
+      configs/dosod/rep_dosod_mlp3x_l_100e_1x8gpus_obj365v1_goldg_train_lvis_minival.py \
+      ./work_dir/dosod_mlp3x_l_rep.pth \
+      --without-nms \
+      --device "cpu" \
+      --work-dir ./work_dir
 ```
-> `path_to_rep_onnx_file` is the output from step 3
+
+* Step 5: run onnx demo
+
+> python3 deploy/onnx_demo.py path_to_rep_onnx_file path_to_test_image path_to_texts_json_file --output-dir dir_to_save_result_image --onnx-nms
+
+> `path_to_rep_onnx_file` is the output from step 3, for example `./work_dir/dosod_mlp3x_l_rep.onnx`
+
+> `path_to_test_image` is the test image you need, for example `./demo/sample_images/bus.jpg`
+
+> `path_to_texts_json_file` is the test imag, for example `./demo/sample_images/bus.jpg`
+
+```shell
+export PYTHONPATH=/root/DOSOD/
+python3 deploy/onnx_demo.py \
+      ./work_dir/dosod_mlp3x_l_rep.onnx \
+      ./demo/sample_images/bus.jpg \
+      data/texts/offline_vocabulary.json \
+      --output-dir ./work_dir \
+      --onnx-nms
+```
 
 ### 4.2 On RDK X5
 To make the model available for RDK X5, we need to use another config file in Step 3: <br>
