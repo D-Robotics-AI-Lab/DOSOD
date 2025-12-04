@@ -209,7 +209,7 @@ python3 tools/generate_text_prompts_dosod.py  \
 * Step 3: reparameterize model weights
 > python3 tools/reparameterize_dosod.py --model path_to_model_file --out-dir dir_to_save_rep_model_file --text-embed path_to_embedding_npy_file
 
-> `path_to_embedding_npy_file` is the output from step 1, for example `./work_dir/offline_vocabulary_dosod_mlp3x_l.npy`
+> `path_to_embedding_npy_file` is the output from step 2, for example `./work_dir/offline_vocabulary_dosod_mlp3x_l.npy`
 
 ```shell
 export PYTHONPATH=/root/DOSOD/
@@ -225,7 +225,7 @@ python3 tools/reparameterize_dosod.py \
 
 > `path_to_rep_config_file` is the modified config for rep, for example `configs/dosod/rep_dosod_mlp3x_s_100e_1x8gpus_obj365v1_goldg_train_lvis_minival.py`. You need to set the key parameter **`num_training_classes`** to the count of categories for example 80.
 
-> `path_to_rep_model_file` is the output from step 2, for example `./work_dir/dosod_mlp3x_l_rep.pth`
+> `path_to_rep_model_file` is the output from step 3, for example `./work_dir/dosod_mlp3x_l_rep.pth`
 
 ```shell
 export PYTHONPATH=/root/DOSOD/
@@ -241,7 +241,7 @@ python3 deploy/export_onnx.py \
 
 > python3 deploy/onnx_demo.py path_to_rep_onnx_file path_to_test_image path_to_texts_json_file --output-dir dir_to_save_result_image --onnx-nms
 
-> `path_to_rep_onnx_file` is the output from step 3, for example `./work_dir/dosod_mlp3x_l_rep.onnx`
+> `path_to_rep_onnx_file` is the output from step 4, for example `./work_dir/dosod_mlp3x_l_rep.onnx`
 
 > `path_to_test_image` is the test image you need, for example `./demo/sample_images/bus.jpg`
 
@@ -258,7 +258,7 @@ python3 deploy/onnx_demo.py \
 ```
 
 ### 4.2 On RDK X5
-To make the model available for RDK X5, we need to use another config file in Step 3: <br>
+To make the model available for RDK X5, we need to use another config file in Step 4: <br>
 `path_to_rep_config_file` should be files with suffix *_d-robotics.py*, for exmaple `configs/dosod/rep_dosod_mlp3x_s_d-robotics.py`
 For more details, you can refer to [code file](yolo_world/models/dense_heads/dosod_head.py).
 
