@@ -223,7 +223,7 @@ python3 tools/reparameterize_dosod.py \
 
 > python3 deploy/export_onnx.py path_to_rep_config_file path_to_rep_model_file --without-nms --work-dir dir_to_save_rep_onnx_file
 
-> `path_to_rep_config_file` is the modified config for rep, for example `configs/dosod/rep_dosod_mlp3x_s_100e_1x8gpus_obj365v1_goldg_train_lvis_minival.py`. You need to set the key parameter **`num_training_classes`** to the count of categories for example 80.
+> `path_to_rep_config_file` is the modified config for rep, for example `configs/dosod/rep_dosod_mlp3x_s_100e_1x8gpus_obj365v1_goldg_train_lvis_minival.py`. You need to set the key parameter **`num_training_classes`** to the count of categories, for example 80.
 
 > `path_to_rep_model_file` is the output from step 3, for example `./work_dir/dosod_mlp3x_l_rep.pth`
 
