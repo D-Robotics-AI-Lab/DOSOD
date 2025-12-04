@@ -306,7 +306,8 @@ class RepDOSODYOLOv8dHeadModule(YOLOv8HeadModule):
 
         reg_out_channels = max(
             (16, self.in_channels[0] // 4, self.reg_max * 4))
-        cls_out_channels = max(self.in_channels[0], self.num_classes)
+        # cls_out_channels = max(self.in_channels[0], self.num_classes)
+        cls_out_channels = self.in_channels[0]
 
         for i in range(self.num_levels):
             self.reg_preds.append(
