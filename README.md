@@ -158,7 +158,7 @@ Reparameterize and infer model as the example with 80 categories COCO.
 
 ### 4.1 On X86 PC (CPU or NVIDIA RTX 4090)
 
-* Step 0: (Optional) environment setup. If you already use `Part 3` setup the environment, skip this setup.
+* Step 0: (Optional) environment setup. If you already use `Part 3` setup the environment, skip this step.
 
 ```shell
 # download docker image and load
