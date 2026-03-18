@@ -1,0 +1,34 @@
+model_parameters:
+  onnx_model: './dosod_mlp3x_l_rep.onnx'
+  march: 'nash-p'
+  output_model_file_prefix: 'dosod_mlp3x_l_rep-int16'
+  working_dir: './model_output_l_s600'
+  remove_node_type: 'Dequantize;Quantize;Transpose;Cast;Reshape'
+  layer_out_dump: False
+
+input_parameters:
+  input_name: 'images'
+  input_type_train: 'rgb'
+  input_layout_train: 'NCHW'
+  input_shape: '1x3x640x640'
+  input_batch: 1
+  norm_type: 'data_scale'
+  mean_value: ''
+  scale_value: 0.003921568627451
+  input_layout_rt: 'NHWC'
+  input_type_rt: 'nv12'
+
+calibration_parameters:
+  cal_data_dir: './coco_val_100_calib_s600'
+  cal_data_type: 'float32'
+  preprocess_on: False
+  calibration_type: 'max'
+  max_percentile: 0.99995
+  optimization: 'set_all_nodes_int16;'
+  
+compiler_parameters:
+  compile_mode: 'latency'
+  debug: False
+  optimize_level: 'O2'
+  jobs: 32
+

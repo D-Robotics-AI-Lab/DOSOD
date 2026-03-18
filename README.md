@@ -156,7 +156,7 @@ Some extra things need attention are as follows:
 
 Reparameterize and infer model as the example with 80 categories COCO.
 
-### 4.1 On X86 PC (CPU or NVIDIA RTX 4090)
+### 4.1 Train and export model On X86 PC (CPU or NVIDIA RTX 4090)
 
 * Step 0: (Optional) environment setup. If you already use `Part 3` setup the environment, skip this step.
 
@@ -189,6 +189,19 @@ python3 tools/generate_vocabulary_json.py --text "person","bicycle","car","motor
 By the way, you can refer other basic category files under the foloder [./data/texts](./data/texts)
 
 * Step 2: generate texts embeddings
+
+Download the weight at first.
+
+```shell
+cd DOSOD
+git lfs install
+
+git clone https://huggingface.co/D-Robotics/DOSOD
+# or 'git clone https://modelscope.cn/models/D-Robotics/DOSOD'
+
+git clone https://huggingface.co/openai/clip-vit-base-patch32
+# or 'git clone https://modelscope.cn/models/openai-mirror/clip-vit-base-patch32'
+```
 
 > python3 tools/generate_text_prompts_dosod.py path_to_config_file path_to_model_file --text path_to_texts_json_file --out-dir dir_to_save_embedding_npy_file
 
@@ -257,7 +270,11 @@ python3 deploy/onnx_demo.py \
       --onnx-nms
 ```
 
-### 4.2 On RDK X5
+### 4.2 Build the model in ai toolchain
+
+- [The usage of X5 ai toolchain](./ai_toolchain/x5/README.md)
+
+### 4.3 Run on RDK X5
 To make the model available for RDK X5, we need to use another config file in Step 4: <br>
 `path_to_rep_config_file` should be files with suffix *_d-robotics.py*, for exmaple `configs/dosod/rep_dosod_mlp3x_s_d-robotics.py`
 For more details, you can refer to [code file](yolo_world/models/dense_heads/dosod_head.py).
